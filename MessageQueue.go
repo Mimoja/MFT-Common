@@ -29,30 +29,29 @@ type MessageBundle struct {
 
 type MessageQueue struct {
 	Connection *amqp.Channel
-	name       string
 	topic      string
 	log        *logrus.Logger
 }
 
-func MQConnect(log *logrus.Logger, serviceName string) MessageBundle {
+func MQConnect(log *logrus.Logger) MessageBundle {
 	conn, err := amqp.Dial("amqp://***REMOVED***:***REMOVED***@localhost:5672/")
 	if err != nil {
 		log.WithError(err).Panicf("Could not connect to rabbitMQ: %v", err)
 	}
 
 	return MessageBundle{
-		URLQueue:         buildMessageQueue(log, conn, serviceName, URLQueueTopic),
-		DownloadedQueue:  buildMessageQueue(log, conn, serviceName, DownloadedTopic),
-		DeleteQueue:      buildMessageQueue(log, conn, serviceName, DeleteTopic),
-		FlashImagesQueue: buildMessageQueue(log, conn, serviceName, FlashImages),
-		BiosImagesQueue:  buildMessageQueue(log, conn, serviceName, BiosImages),
-		MEImagesQueue:    buildMessageQueue(log, conn, serviceName, MEImages),
-		ExtractedQueue:   buildMessageQueue(log, conn, serviceName, ExtractedQeueTopic),
-		TestQueue:        buildMessageQueue(log, conn, serviceName, "TESTQUEUE"),
+		URLQueue:         buildMessageQueue(log, conn,  URLQueueTopic),
+		DownloadedQueue:  buildMessageQueue(log, conn,  DownloadedTopic),
+		DeleteQueue:      buildMessageQueue(log, conn,  DeleteTopic),
+		FlashImagesQueue: buildMessageQueue(log, conn,  FlashImages),
+		BiosImagesQueue:  buildMessageQueue(log, conn,  BiosImages),
+		MEImagesQueue:    buildMessageQueue(log, conn,  MEImages),
+		ExtractedQueue:   buildMessageQueue(log, conn,  ExtractedQeueTopic),
+		TestQueue:        buildMessageQueue(log, conn,  "TESTQUEUE"),
 	}
 }
 
-func buildMessageQueue(log *logrus.Logger, connection *amqp.Connection, serviceName string, queueName string) MessageQueue {
+func buildMessageQueue(log *logrus.Logger, connection *amqp.Connection, queueName string) MessageQueue {
 
 	ch, err := connection.Channel()
 
@@ -79,7 +78,6 @@ func buildMessageQueue(log *logrus.Logger, connection *amqp.Connection, serviceN
 
 	mq := MessageQueue{
 		Connection: ch,
-		name:       serviceName,
 		topic:      queueName,
 		log:        log,
 	}
@@ -118,7 +116,7 @@ func (mq MessageQueue) Send(data string) error {
 func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc) {
 
 	q, err := mq.Connection.QueueDeclare(
-		mq.topic+"->"+mq.name,    // name
+		mq.topic+"->"+consumerName,    // name
 		true, // durable
 		false, // delete when unused
 		false,  // exclusive

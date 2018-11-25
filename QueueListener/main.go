@@ -9,17 +9,18 @@ var MQ MFTCommon.MessageBundle
 func main() {
 
 	Log := MFTCommon.ConnectLogger("QueueListener")
-	MQ := MFTCommon.MQConnect(Log, "QueueListener")
+	MQ := MFTCommon.MQConnect(Log)
 
-	MQ.URLQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
+	MQ.URLQueue.RegisterCallback("Downloader", func(payload string) error {
 		Log.WithField("queue", "url").Infof("[URL]: '%s'\n", payload)
 		return nil
 	})
-
-	MQ.DownloadedQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
+/*
+	MQ.DownloadedQueue.RegisterCallback("Downloader", func(payload string) error {
 		Log.WithField("queue", "downloaded").Infof("[Downloaded]: '%s'\n", payload)
 		return nil
 	})
+
 	MQ.DeleteQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
 		Log.WithField("queue", "Delete").Infof("[Delete]: '%s'\n", payload)
 		return nil
@@ -43,6 +44,6 @@ func main() {
 		Log.WithField("queue", "test").Infof("[TEST]: '%s'\n", payload)
 		return nil
 	})
-
+	*/
 	select {}
 }

@@ -13,7 +13,7 @@ func main() {
 
 	fmt.Printf("%f", rand.Float32())
 	Log := MFTCommon.ConnectLogger("TestService")
-	MQ := MFTCommon.MQConnect(Log, "testService")
+	MQ := MFTCommon.MQConnect(Log)
 
 	cha := make(chan bool)
 
