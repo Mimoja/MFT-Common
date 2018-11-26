@@ -142,6 +142,16 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 
 	mq.log.WithField("MessageQueue", mq.topic).Infof("Created Queue: %v", q.Name)
 
+	err = mq.Connection.Qos(
+		1,     // prefetch count
+		0,     // prefetch size
+		false, // global
+	)
+
+	if err != nil {
+		mq.log.WithField("MessageQueue", mq.topic).WithError(err).Error("Could not set prefetch count")
+		return
+	}
 
 	msgs, err := mq.Connection.Consume(
 		q.Name, // queue
@@ -152,8 +162,9 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 		false,  // no-wait
 		nil,    // args
 	)
+	
 	if err != nil {
-		logrus.WithField("MessageQueue", mq.topic).WithError(err).Errorf("Could not create consumer for %s", mq.topic)
+		mq.log.WithField("MessageQueue", mq.topic).WithError(err).Errorf("Could not create consumer for %s", mq.topic)
 	}
 
 	go func() {
@@ -167,5 +178,5 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 		}
 	}()
 
-	logrus.WithField("MessageQueue", mq.topic).Debug("Callback registered")
+	mq.log.WithField("MessageQueue", mq.topic).Debug("Callback registered")
 }
