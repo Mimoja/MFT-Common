@@ -143,7 +143,7 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 	mq.log.WithField("MessageQueue", mq.topic).Infof("Created Queue: %v", q.Name)
 
 	err = mq.Connection.Qos(
-		1,     // prefetch count
+		10,     // prefetch count
 		0,     // prefetch size
 		false, // global
 	)
