@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/Mimoja/MimojaFirmwareToolkit/pkg/Common"
-	"math/rand"
 	"time"
 )
 
@@ -11,7 +10,6 @@ var MQ MFTCommon.MessageBundle
 
 func main() {
 
-	fmt.Printf("%f", rand.Float32())
 	Log := MFTCommon.ConnectLogger("TestService")
 	MQ := MFTCommon.MQConnect(Log)
 
@@ -19,6 +17,7 @@ func main() {
 
 	MQ.TestQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
 		Log.Infof("Payload: '%s'", payload)
+		panic("1237")
 		//cha <- true
 		err :=  fmt.Errorf("penis")
 		return err

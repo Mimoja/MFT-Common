@@ -169,6 +169,11 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 
 	go func() {
 		for d := range msgs {
+			defer func() {
+				if r := recover(); r != nil {
+					mq.log.WithField("message", d).Error("Panic during processing. Recovering from: ", r)
+				}
+			}()
 			err := callback(string(d.Body))
 			if(err != nil){
 				mq.log.Errorf("Callback failed: %v", err)
