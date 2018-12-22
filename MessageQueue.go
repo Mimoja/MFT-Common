@@ -171,7 +171,7 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 		for d := range msgs {
 			defer func() {
 				if r := recover(); r != nil {
-					mq.log.WithField("message", d).Error("Panic during processing. Recovering from: ", r)
+					mq.log.WithField("message", d).Fatal("Panic during processing. Recovering from: ", r)
 				}
 			}()
 			err := callback(string(d.Body))
