@@ -24,19 +24,25 @@ type DownloadEntry struct {
 	DownloadURL      string  `json:",omitempty"`
 	DownloadPath     string  `json:",omitempty"`
 	DownloadTime     string  `json:",omitempty" hash:"-"`
-	PackageId        IDEntry `json:",omitempty" hash:"-"`
+	PackageID        IDEntry `json:",omitempty" hash:"-"`
 }
 
 type ImportEntry struct {
-	PackageId  IDEntry        `json:",omitempty"`
+	MetaData DownloadEntry `json:",omitempty"`
 	Contents   []StorageEntry `json:",omitempty"`
-	ImportTime string
+	ImportTime string `json:",omitempty"`
+	Success bool `json:",omitempty"`
 }
-
 type StorageEntry struct {
 	ID        IDEntry  `json:",omitempty"`
 	PackageID IDEntry  `json:",omitempty"`
-	Path      string   `json:",omitempty"`
+	Path string `json:",omitempty"`
+	Tags      []string `json:",omitempty"`
+}
+
+type FlashImage struct {
+	MetaData DownloadEntry `json:",omitempty"`
+	ID        IDEntry  `json:",omitempty"`
 	Tags      []string `json:",omitempty"`
 }
 

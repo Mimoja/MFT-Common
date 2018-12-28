@@ -11,12 +11,8 @@ const s3AccessKeyID = "***REMOVED***"
 const s3SecretAccessKey = "***REMOVED***"
 const s3useSSL = false
 
-const DownloadedBucket = "downloader"
-const FlashImagesBucket = "flashimages"
-const MEImagesBucket = "meimages"
-const MicrocodeBucket = "microcode"
-const EFIBucket = "efiimages"
-const CryptoBucket = "crypto"
+const MainBucket = "files"
+
 
 type Storage struct {
 	client *minio.Client
@@ -24,7 +20,6 @@ type Storage struct {
 }
 
 func StorageConnect(Log *logrus.Logger) *Storage {
-	buckets := []string{DownloadedBucket, FlashImagesBucket, MEImages, EFIBucket, MicrocodeBucket, CryptoBucket}
 
 	// Initialize minio client object.
 	Log.Info("Connecting to S3")
@@ -35,15 +30,14 @@ func StorageConnect(Log *logrus.Logger) *Storage {
 	}
 	storage := &Storage{client: client, log: Log}
 
-	// Create starting buckets
-	for _, bucket := range buckets {
-		Log.Info("Creating Bucket ", bucket)
-		err = storage.MakeBucket(bucket)
-		if err != nil {
-			Log.WithError(err).Panic("Bucket creation failed")
-			return nil // unreached
-		}
+	// Create bucket
+	Log.Info("Creating Bucket ", MainBucket)
+	err = storage.MakeBucket(MainBucket)
+	if err != nil {
+		Log.WithError(err).Panic("Bucket creation failed")
+		return nil // unreached
 	}
+
 	return storage
 }
 
@@ -57,7 +51,7 @@ func (storage Storage) MakeBucket(bucketName string) error {
 		return err
 	}
 	if exists {
-		storage.log.Debug("Bucket '", bucketName, "' already exists ")
+		storage.log.Debug("Bucket '",bucketName, "' already exists ")
 		return nil
 	}
 
@@ -67,29 +61,29 @@ func (storage Storage) MakeBucket(bucketName string) error {
 		return err
 	}
 
-	logrus.Debug("Successfully created", bucketName)
+	storage.log.Debug("Successfully created Bucket")
 	return nil
 }
 
-func (storage Storage) StoreBytes(bucketName string, byte []byte, remotePath string) error {
-	_, err := storage.client.PutObject(bucketName, remotePath, bytes.NewReader(byte), int64(len(byte)), minio.PutObjectOptions{})
+func (storage Storage) StoreBytes(byte []byte, remotePath string) error {
+	_, err := storage.client.PutObject(MainBucket, remotePath, bytes.NewReader(byte), int64(len(byte)), minio.PutObjectOptions{})
 	if err != nil {
 		storage.log.WithError(err).Error("Could not store: %v\n", err)
 	}
 	return err
 }
 
-func (storage Storage) StoreFile(bucketName string, localPath string, remotePath string) error {
+func (storage Storage) StoreFile(localPath string, remotePath string) error {
 
-	_, err := storage.client.FPutObject(bucketName, remotePath, localPath, minio.PutObjectOptions{})
+	_, err := storage.client.FPutObject(MainBucket, remotePath, localPath, minio.PutObjectOptions{})
 	return err
 }
 
-func (storage Storage) FileExists(bucketName string, remotePath string) (minio.ObjectInfo, error) {
-	return storage.client.StatObject(bucketName, remotePath, minio.StatObjectOptions{})
+func (storage Storage) FileExists(remotePath string) (minio.ObjectInfo, error) {
+	return storage.client.StatObject(MainBucket, remotePath, minio.StatObjectOptions{})
 }
 
-func (storage Storage) GetFile(bucketName string, remotePath string) (*minio.Object, error) {
+func (storage Storage) GetFile(remotePath string) (*minio.Object, error) {
 
-	return storage.client.GetObject(bucketName, remotePath, minio.GetObjectOptions{})
+	return storage.client.GetObject(MainBucket, remotePath, minio.GetObjectOptions{})
 }
