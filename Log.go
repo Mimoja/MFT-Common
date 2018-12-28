@@ -12,16 +12,16 @@ func ConnectLogger(service string) *logrus.Logger {
 
 	log.Level = logrus.DebugLevel
 
-	client, err := elastic.NewClient(elastic.SetURL("http://localhost:9200"))
+	client, err := elastic.NewClient(elastic.SetURL("http://***REMOVED***:9200"))
 	if err != nil {
 		log.WithError(err).Error("Could not connect to Elastic for logging")
-		return log;
+		return log
 	}
 
 	hook, err := elogrus.NewElasticHook(client, service, logrus.DebugLevel, "logging")
 	if err != nil {
 		log.WithError(err).Error("Could not create logging hook")
-		return log;
+		return log
 	}
 
 	log.Hooks.Add(hook)

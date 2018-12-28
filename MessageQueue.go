@@ -34,20 +34,20 @@ type MessageQueue struct {
 }
 
 func MQConnect(log *logrus.Logger) MessageBundle {
-	conn, err := amqp.Dial("amqp://***REMOVED***:***REMOVED***@localhost:5672/")
+	conn, err := amqp.Dial("amqp://***REMOVED***:***REMOVED***@***REMOVED***:5672/")
 	if err != nil {
 		log.WithError(err).Panicf("Could not connect to rabbitMQ: %v", err)
 	}
 
 	return MessageBundle{
-		URLQueue:         buildMessageQueue(log, conn,  URLQueueTopic),
-		DownloadedQueue:  buildMessageQueue(log, conn,  DownloadedTopic),
-		DeleteQueue:      buildMessageQueue(log, conn,  DeleteTopic),
-		FlashImagesQueue: buildMessageQueue(log, conn,  FlashImages),
-		BiosImagesQueue:  buildMessageQueue(log, conn,  BiosImages),
-		MEImagesQueue:    buildMessageQueue(log, conn,  MEImages),
-		ExtractedQueue:   buildMessageQueue(log, conn,  ExtractedQeueTopic),
-		TestQueue:        buildMessageQueue(log, conn,  "TESTQUEUE"),
+		URLQueue:         buildMessageQueue(log, conn, URLQueueTopic),
+		DownloadedQueue:  buildMessageQueue(log, conn, DownloadedTopic),
+		DeleteQueue:      buildMessageQueue(log, conn, DeleteTopic),
+		FlashImagesQueue: buildMessageQueue(log, conn, FlashImages),
+		BiosImagesQueue:  buildMessageQueue(log, conn, BiosImages),
+		MEImagesQueue:    buildMessageQueue(log, conn, MEImages),
+		ExtractedQueue:   buildMessageQueue(log, conn, ExtractedQeueTopic),
+		TestQueue:        buildMessageQueue(log, conn, "TESTQUEUE"),
 	}
 }
 
@@ -61,20 +61,19 @@ func buildMessageQueue(log *logrus.Logger, connection *amqp.Connection, queueNam
 	}
 
 	err = ch.ExchangeDeclare(
-		queueName,   // name
-		"fanout", // type
-		true,     // durable
-		false,    // auto-deleted
-		false,    // internal
-		false,    // no-wait
-		nil,      // arguments
+		queueName, // name
+		"fanout",  // type
+		true,      // durable
+		false,     // auto-deleted
+		false,     // internal
+		false,     // no-wait
+		nil,       // arguments
 	)
 
 	if err != nil {
 		log.WithField("MessageQueue", queueName).WithError(err).Error("Could not declare exchange")
 		return MessageQueue{}
 	}
-
 
 	mq := MessageQueue{
 		Connection: ch,
@@ -100,9 +99,9 @@ func (mq MessageQueue) Send(data string) error {
 
 	err := mq.Connection.Publish(
 		mq.topic, // exchange
-		"",     // routing key
-		false,  // mandatory
-		false,  // immediate
+		"",       // routing key
+		false,    // mandatory
+		false,    // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        []byte(data),
@@ -116,10 +115,10 @@ func (mq MessageQueue) Send(data string) error {
 func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc) {
 
 	q, err := mq.Connection.QueueDeclare(
-		mq.topic+"->"+consumerName,    // name
-		true, // durable
+		mq.topic+"->"+consumerName, // name
+		true,  // durable
 		false, // delete when unused
-		false,  // exclusive
+		false, // exclusive
 		false, // no-wait
 		nil,   // arguments
 	)
@@ -130,8 +129,8 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 	}
 
 	err = mq.Connection.QueueBind(
-		q.Name, // queue name
-		"",     // routing key
+		q.Name,   // queue name
+		"",       // routing key
 		mq.topic, // exchange
 		false,
 		nil)
@@ -143,7 +142,7 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 	mq.log.WithField("MessageQueue", mq.topic).Infof("Created Queue: %v", q.Name)
 
 	err = mq.Connection.Qos(
-		10,     // prefetch count
+		10,    // prefetch count
 		0,     // prefetch size
 		false, // global
 	)
@@ -156,13 +155,13 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 	msgs, err := mq.Connection.Consume(
 		q.Name, // queue
 		"",     // consumer
-		false,   // auto-ack
+		false,  // auto-ack
 		false,  // exclusive
 		false,  // no-local
 		false,  // no-wait
 		nil,    // args
 	)
-	
+
 	if err != nil {
 		mq.log.WithField("MessageQueue", mq.topic).WithError(err).Errorf("Could not create consumer for %s", mq.topic)
 	}
@@ -175,7 +174,7 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 				}
 			}()
 			err := callback(string(d.Body))
-			if(err != nil){
+			if err != nil {
 				mq.log.Errorf("Callback failed: %v", err)
 				d.Acknowledger.Nack(d.DeliveryTag, false, true)
 			}

@@ -6,13 +6,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const s3Endpoint = "localhost:9000"
+const s3Endpoint = "***REMOVED***:9000"
 const s3AccessKeyID = "***REMOVED***"
 const s3SecretAccessKey = "***REMOVED***"
 const s3useSSL = false
 
 const MainBucket = "files"
-
 
 type Storage struct {
 	client *minio.Client
@@ -51,7 +50,7 @@ func (storage Storage) MakeBucket(bucketName string) error {
 		return err
 	}
 	if exists {
-		storage.log.Debug("Bucket '",bucketName, "' already exists ")
+		storage.log.Debug("Bucket '", bucketName, "' already exists ")
 		return nil
 	}
 
