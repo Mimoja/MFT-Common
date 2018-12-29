@@ -45,7 +45,8 @@ type FlashImage struct {
 	ID             IDEntry              `json:",omitempty"`
 	Tags           []string             `json:",omitempty"`
 	FirmwareOffset int64                `json:",omitempty"`
-	IFD            *IntelFlashDescriptor `json:",omitempty"`
+	IFD            *IntelFlashDescriptor `json:"IFD"`
+	Certificates []map[string]interface{} `json:"Certificates"`
 }
 
 type IDEntry struct {
