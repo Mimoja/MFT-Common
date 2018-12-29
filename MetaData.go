@@ -41,9 +41,11 @@ type StorageEntry struct {
 }
 
 type FlashImage struct {
-	MetaData DownloadEntry `json:",omitempty"`
-	ID        IDEntry  `json:",omitempty"`
-	Tags      []string `json:",omitempty"`
+	MetaData       DownloadEntry        `json:",omitempty"`
+	ID             IDEntry              `json:",omitempty"`
+	Tags           []string             `json:",omitempty"`
+	FirmwareOffset int64                `json:",omitempty"`
+	IFD            *IntelFlashDescriptor `json:",omitempty"`
 }
 
 type IDEntry struct {
