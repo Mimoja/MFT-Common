@@ -2,7 +2,7 @@ package MFTCommon
 
 import (
 	"context"
-	// "fmt"
+	"fmt"
 	"github.com/olivere/elastic"
 	"github.com/sirupsen/logrus"
 )
@@ -51,31 +51,40 @@ func (d DataBase) StoreElement(index string, typeString *string, entry interface
 
 }
 
-// func (d DataBase) appendElement(index string, typeString *string, entry interface{}, id *string, newElement interface{}) {
-// 	ctx := context.Background()
-// 	scriptString := fmt.Sprintf("ctx._source.%s += newEntry", entry)
-// 	update, err := d.ES.Update().Index(index).Type(typeString).Id(id).
-// 		Script(scriptString).
-// 		ScriptParams(map[string]interface{}{"newEntry": newElement}).
-// 		Do(ctx)
-// 	if err != nil {
-// 		log.Errorf("Error while appending to %s", entry)
-// 	}
-// 	log.Infof("Appent %s to %s", newElement, entry)
-// }
+func (d DataBase) appendElement(index string, typeString *string, entry interface{}, id *string, newElement interface{}) {
+	ctx := context.Background()
+	scriptString := fmt.Sprintf("ctx._source.%s += newEntry", newElement)
+	script := elastic.NewScript(scriptString).
+		Params(map[string]interface{}{"newEntry": newElement})
 
-// func (d DataBase) updateElement(index string, typeString *string, entry interface{}, id *string) {
-// 	ctx := context.Background()
-// 	scriptString := fmt.Sprintf("ctx._source.%s = newEntry", entry)
-// 	update, err := d.ES.Update().Index(index).Type(typeString).Id(id).
-// 		Script(scriptString).
-// 		ScriptParams(map[string]interface{}{"newEntry": entry}).
-// 		Do(ctx)
-// 	if err != nil {
-// 		log.Errorf("Error while appending to %s", field)
-// 	}
-// 	log.Infof("Appent %s to %s", entry, field)
-// }
+	_, err := d.ES.Update().
+		Index(index).
+		Type(*typeString).
+		Id(*id).
+		Script(script).
+		Do(ctx)
+	if err != nil {
+		d.log.Errorf("Error while appending to %s", entry)
+	}
+	d.log.Infof("Appent %s to %s", newElement, entry)
+}
+
+func (d DataBase) updateElement(index string, typeString *string, entry interface{}, id *string) {
+	ctx := context.Background()
+	scriptString := fmt.Sprintf("ctx._source.%s = newEntry", entry)
+	script := elastic.NewScript(scriptString).
+		Params(map[string]interface{}{"newEntry": entry})
+	_, err := d.ES.Update().
+		Index(index).
+		Type(*typeString).
+		Id(*id).
+		Script(script).
+		Do(ctx)
+	if err != nil {
+		d.log.Errorf("Error while updating %s", entry)
+	}
+	d.log.Infof("updated %s", entry)
+}
 
 func (d DataBase) StoreJSON(index string, typeString *string, entry string, id *string) {
 
