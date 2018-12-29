@@ -2,6 +2,7 @@ package MFTCommon
 
 import (
 	"context"
+	"fmt"
 	"github.com/olivere/elastic"
 	"github.com/sirupsen/logrus"
 )
@@ -48,6 +49,32 @@ func (d DataBase) StoreElement(index string, typeString *string, entry interface
 	is := d.ES.Index().BodyJson(entry)
 	store(d.log, is, index, typeString, id)
 
+}
+
+func (d DataBase) appendElement(index string, typeString *string, entry interface{}, id *string, newElement interface{}) {
+	ctx := context.Background()
+	scriptString := fmt.Sprintf("ctx._source.%s += newEntry", entry)
+	update, err := d.ES.Update().Index(index).Type(typeString).Id(id).
+		Script(scriptString).
+		ScriptParams(map[string]interface{}{"newEntry": newElement}).
+		Do(ctx)
+	if err != nil {
+		log.Errorf("Error while appending to %s", entry)
+	}
+	log.Infof("Appent %s to %s", newElement, entry)
+}
+
+func (d DataBase) updateElement(index string, typeString *string, entry interface{}, id *string) {
+	ctx := context.Background()
+	scriptString := fmt.Sprintf("ctx._source.%s = newEntry", entry)
+	update, err := d.ES.Update().Index(index).Type(typeString).Id(id).
+		Script(scriptString).
+		ScriptParams(map[string]interface{}{"newEntry": entry}).
+		Do(ctx)
+	if err != nil {
+		log.Errorf("Error while appending to %s", field)
+	}
+	log.Infof("Appent %s to %s", entry, field)
 }
 
 func (d DataBase) StoreJSON(index string, typeString *string, entry string, id *string) {
