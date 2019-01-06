@@ -8,6 +8,7 @@ const AMDPSPCOOCKIE = uint32(0x50535024)
 type AMDFirmware struct {
 	AMDFlashDescriptor AMDFirmwareEntryTable
 	AMDPSP *AMDPSPDirectory
+	AMDFlashMapping uint32
 }
 
 const  (
