@@ -2,6 +2,7 @@ package MFTCommon
 
 const AMDSignature = uint32(0x55AA55AA)
 const AMDFLASHMAPPING = uint32(0xFF000000)
+const AMDFLASHMAPPING2 = uint32(0xFF800000)
 const AMDPSPCOOCKIE = uint32(0x50535024)
 
 type AMDFirmware struct {
@@ -30,7 +31,7 @@ type AMDFirmwareEntryTable struct {
 }
 
 type AMDPSPDirectory struct {
-	Header AMDPSPDirectoryHeader
+	Header *AMDPSPDirectoryHeader
 	Entries []AMDPSPDirectoryEntry
 }
 
