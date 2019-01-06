@@ -41,12 +41,13 @@ type StorageEntry struct {
 }
 
 type FlashImage struct {
-	MetaData       DownloadEntry        `json:",omitempty"`
-	ID             IDEntry              `json:",omitempty"`
-	Tags           []string             `json:",omitempty"`
-	FirmwareOffset int64                `json:",omitempty"`
+	MetaData       DownloadEntry         `json:",omitempty"`
+	ID             IDEntry               `json:",omitempty"`
+	Tags           []string              `json:",omitempty"`
+	FirmwareOffset int64                 `json:",omitempty"`
+	AFW            *AMDFirmware          `json:"AFW"`
 	IFD            *IntelFlashDescriptor `json:"IFD"`
-	Certificates []string `json:"Certificates"`
+	Certificates   []string              `json:"Certificates"`
 }
 
 type IDEntry struct {
