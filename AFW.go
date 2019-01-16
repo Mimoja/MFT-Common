@@ -4,27 +4,32 @@ const AMDSignature = uint32(0x55AA55AA)
 const AMDFLASHMAPPING = uint32(0xFF000000)
 
 type AMDFirmware struct {
-	AMDFlashDescriptor AMDFirmwareEntryTable
-	AMDPSP             *AMDPSPDirectory
-	AMDFlashMapping    uint32
+	FirmwareEntryTable AMDFirmwareEntryTable
+	FlashMapping    uint32
+
+	PSPDir             *AMDPSPDirectory
+	NewPSPDir             *AMDPSPDirectory
 }
 
 type AMDFirmwareEntryTable struct {
-	Signature  uint32
-	ImcRomBase uint32
-	GecRomBase uint32
-	XHCRomBase uint32
-	PspDirBase uint32
+	Signature     uint32
+	ImcRomBase    uint32
+	GecRomBase    uint32
+	XHCRomBase    uint32
+	PSPDirBase    uint32
+	NewPSPDirBase uint32
+	BDHDirBase    uint32
+	Unknown1      uint32
 }
 
 /**
  * PSP related constants
  */
 
-const AMDPSPCOOCKIE = uint32(0x50535024) //$PSP
-const AMDBHDCOOCKIE = uint32(0x0)        //$BHD
-const AMDSECONDPSPCOOCKIE = uint32(0x0)  //$PL2
-const AMDSECONDBHDCOOCKIE = uint32(0x0)  //$BL2
+const AMDPSPCOOCKIE = "$PSP"
+const AMDBHDCOOCKIE = "$BHD"
+const AMDSECONDPSPCOOCKIE = "$PL2"
+const AMDSECONDBHDCOOCKIE = "$BL2"
 
 /**
  * PSP related data structures
@@ -36,15 +41,16 @@ type AMDPSPDirectory struct {
 }
 
 type AMDPSPDirectoryHeader struct {
-	PspCookie    uint32
+	PspCookie    [4]byte
 	Checksum     uint32
 	TotalEntries uint32
 	Reserved     uint32
 }
 
 type AMDPSPDirectoryEntry struct {
-	ID IDEntry
-	Binary *AMDPSPDirectoryBinaryEntry
+	ID  IDEntry
+	Raw *AMDPSPDirectoryBinaryEntry
+	Header *AMDPSPEntryHeader
 	TypeInfo *AMDPSPDirectoryEntryType
 }
 
@@ -59,6 +65,37 @@ type AMDPSPDirectoryEntryType struct {
 	Type    uint32
 	Name    string
 	Comment string
+}
+
+type AMDPSPEntryBinaryHeader struct {
+	Unknown1 [16]byte
+	ID uint32
+	SizeSigned uint32
+	Unknown2 [0x18]byte
+	AlwaysOne uint32 // Could be a type
+	Unknown3 [4]byte
+	SigFingerprint [16]byte
+	IsCompressed uint32
+	Unknown4 uint32
+	FullSize uint32
+	Unknown5 [12]byte
+	Version [4] byte
+	Unknown6 [4]byte
+	Unknown7 [4]byte
+	SizePacked uint32
+}
+
+type AMDPSPEntryHeader struct {
+	ID IDEntry
+	ContentID IDEntry
+	Raw AMDPSPEntryBinaryHeader
+	Ident uint32
+	SizeSigned uint32
+	SigFingerprint string
+	IsCompressed bool
+	FullSize uint32
+	Version string
+	SizePacked uint32
 }
 
 var AMDPSPDirectoryEntries = []AMDPSPDirectoryEntryType{
