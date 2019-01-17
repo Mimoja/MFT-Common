@@ -7,8 +7,8 @@ type AMDFirmware struct {
 	FirmwareEntryTable AMDFirmwareEntryTable
 	FlashMapping    uint32
 
-	PSPDir             *AMDPSPDirectory
-	NewPSPDir             *AMDPSPDirectory
+	PSPDir      []AMDPSPDirectory
+	NewPSPDir   []AMDPSPDirectory
 }
 
 type AMDFirmwareEntryTable struct {
@@ -27,6 +27,7 @@ type AMDFirmwareEntryTable struct {
  */
 
 const AMDPSPCOOCKIE = "$PSP"
+const AMDDUALPSPCOOCKIE = "2PSP"
 const AMDBHDCOOCKIE = "$BHD"
 const AMDSECONDPSPCOOCKIE = "$PL2"
 const AMDSECONDBHDCOOCKIE = "$BL2"
