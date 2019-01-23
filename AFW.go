@@ -58,7 +58,8 @@ type AMDPSPDirectoryEntry struct {
 type AMDPSPDirectoryBinaryEntry struct {
 	Type     uint32
 	Size     uint32
-	Location uint64
+	Location uint32
+	Reserved uint32
 }
 
 
