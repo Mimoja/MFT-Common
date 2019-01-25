@@ -4,22 +4,30 @@ const AMDSignature = uint32(0x55AA55AA)
 const AMDFLASHMAPPING = uint32(0xFF000000)
 
 type AMDFirmware struct {
-	FirmwareEntryTable AMDFirmwareEntryTable
-	FlashMapping    uint32
+	FirmwareEntryTable *AMDFirmwareEntryTable
+	FlashMapping       uint32
 
-	PSPDir      []AMDPSPDirectory
-	NewPSPDir   []AMDPSPDirectory
+	AGESA []AMDAGESA
+
+	PSPDir    []AMDPSPDirectory
+	NewPSPDir []AMDPSPDirectory
 }
 
 type AMDFirmwareEntryTable struct {
 	Signature     uint32
-	ImcRomBase    uint32
-	GecRomBase    uint32
-	XHCRomBase    uint32
-	PSPDirBase    uint32
-	NewPSPDirBase uint32
-	BDHDirBase    uint32
-	Unknown1      uint32
+	ImcRomBase    *uint32
+	GecRomBase    *uint32
+	XHCRomBase    *uint32
+	PSPDirBase    *uint32
+	NewPSPDirBase *uint32
+	BDHDirBase    *uint32
+	Unknown1      *uint32
+}
+
+type AMDAGESA struct {
+	Header string
+	Raw    string
+	Offset uint32
 }
 
 /**
@@ -49,9 +57,9 @@ type AMDPSPDirectoryHeader struct {
 }
 
 type AMDPSPDirectoryEntry struct {
-	ID  IDEntry
-	Raw *AMDPSPDirectoryBinaryEntry
-	Header *AMDPSPEntryHeader
+	ID       IDEntry
+	Raw      *AMDPSPDirectoryBinaryEntry
+	Header   *AMDPSPEntryHeader
 	TypeInfo *AMDPSPDirectoryEntryType
 }
 
@@ -62,7 +70,6 @@ type AMDPSPDirectoryBinaryEntry struct {
 	Reserved uint32
 }
 
-
 type AMDPSPDirectoryEntryType struct {
 	Type    uint32
 	Name    string
@@ -70,34 +77,34 @@ type AMDPSPDirectoryEntryType struct {
 }
 
 type AMDPSPEntryBinaryHeader struct {
-	Unknown1 [16]byte
-	ID uint32
-	SizeSigned uint32
-	Unknown2 [0x18]byte
-	AlwaysOne uint32 // Could be a type
-	Unknown3 [4]byte
+	Unknown1       [16]byte
+	ID             uint32
+	SizeSigned     uint32
+	Unknown2       [0x18]byte
+	AlwaysOne      uint32 // Could be a type
+	Unknown3       [4]byte
 	SigFingerprint [16]byte
-	IsCompressed uint32
-	Unknown4 uint32
-	FullSize uint32
-	Unknown5 [12]byte
-	Version [4] byte
-	Unknown6 [4]byte
-	Unknown7 [4]byte
-	SizePacked uint32
+	IsCompressed   uint32
+	Unknown4       uint32
+	FullSize       uint32
+	Unknown5       [12]byte
+	Version        [4]byte
+	Unknown6       [4]byte
+	Unknown7       [4]byte
+	SizePacked     uint32
 }
 
 type AMDPSPEntryHeader struct {
-	ID IDEntry
-	ContentID IDEntry
-	Raw AMDPSPEntryBinaryHeader
-	Ident uint32
-	SizeSigned uint32
+	ID             IDEntry
+	ContentID      IDEntry
+	Raw            AMDPSPEntryBinaryHeader
+	Ident          uint32
+	SizeSigned     uint32
 	SigFingerprint string
-	IsCompressed bool
-	FullSize uint32
-	Version string
-	SizePacked uint32
+	IsCompressed   bool
+	FullSize       uint32
+	Version        string
+	SizePacked     uint32
 }
 
 var AMDPSPDirectoryEntries = []AMDPSPDirectoryEntryType{
@@ -136,4 +143,3 @@ var AMDPSPDirectoryEntries = []AMDPSPDirectoryEntryType{
 	{0x15f, "!FW_PSP_SMUSCS_2", "seems to be a secondary FW_PSP_SMUSCS"},
 	{0x30062, "{0x30062~UEFI-IMAGE~", ""},
 }
-

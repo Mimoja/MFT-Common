@@ -19,14 +19,14 @@ func main() {
 		Log.Infof("Payload: '%s'", payload)
 		panic("1237")
 		//cha <- true
-		err :=  fmt.Errorf("penis")
+		err := fmt.Errorf("penis")
 		return err
 	})
 
 	MQ.TestQueue.Send("Test")
 
-	<- cha
+	<-cha
 
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 
 }
