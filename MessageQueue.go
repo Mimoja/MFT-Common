@@ -34,7 +34,7 @@ type MessageQueue struct {
 }
 
 func MQConnect(log *logrus.Logger) MessageBundle {
-	conn, err := amqp.Dial("amqp://***REMOVED***:***REMOVED***@***REMOVED***:5672/")
+	conn, err := amqp.Dial("amqp://***REMOVED***:***REMOVED***@127.0.0.1:5672/")
 	if err != nil {
 		log.WithError(err).Panicf("Could not connect to rabbitMQ: %v", err)
 	}
@@ -168,15 +168,11 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 
 	go func() {
 		for d := range msgs {
-			defer func() {
-				if r := recover(); r != nil {
-					mq.log.WithField("message", d).Fatal("Panic during processing. Recovering from: ", r)
-				}
-			}()
+
 			err := callback(string(d.Body))
 			if err != nil {
 				mq.log.Errorf("Callback failed: %v", err)
-				d.Acknowledger.Nack(d.DeliveryTag, false, true)
+				//d.Acknowledger.Nack(d.DeliveryTag, false, true)
 			}
 			d.Acknowledger.Ack(d.DeliveryTag, false)
 		}

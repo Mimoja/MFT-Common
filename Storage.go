@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const s3Endpoint = "***REMOVED***:9000"
+const s3Endpoint = "127.0.0.1:9000"
 const s3AccessKeyID = "***REMOVED***"
 const s3SecretAccessKey = "***REMOVED***"
 const s3useSSL = false
