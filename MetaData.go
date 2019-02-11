@@ -28,10 +28,11 @@ type DownloadEntry struct {
 }
 
 type ImportEntry struct {
-	MetaData   DownloadEntry  `json:",omitempty"`
-	Contents   []StorageEntry `json:",omitempty"`
-	ImportTime string         `json:",omitempty"`
-	Success    bool           `json:",omitempty"`
+	ImportDataDefinition string `json:",omitempty"`
+	MetaData             DownloadEntry   `json:",omitempty"`
+	Contents             []StorageEntry  `json:",omitempty"`
+	ImportTime           string          `json:",omitempty"`
+	Success              bool            `json:",omitempty"`
 }
 type StorageEntry struct {
 	ID        IDEntry  `json:",omitempty"`
@@ -41,6 +42,7 @@ type StorageEntry struct {
 }
 
 type FlashImage struct {
+	FlashimageDataDefinition string `json:",omitempty"`
 	MetaData       DownloadEntry  `json:",omitempty"`
 	ID             IDEntry        `json:",omitempty"`
 	Tags           []string       `json:",omitempty"`
