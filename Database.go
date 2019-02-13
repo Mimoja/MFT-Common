@@ -12,12 +12,7 @@ type DataBase struct {
 	log *logrus.Logger
 }
 
-type DBConfiguration struct {
-	URI      string
-	Protocol string
-}
-
-func dbConnect(config AppConfiguration, log *logrus.Logger) DataBase {
+func dbConnect(config *AppConfiguration, log *logrus.Logger) DataBase {
 	client, err := elastic.NewClient()
 	checkErr(err)
 

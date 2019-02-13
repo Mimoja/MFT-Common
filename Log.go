@@ -7,13 +7,9 @@ import (
 )
 
 
-type LoggerConfiguration struct {
-	Protocol string
-	URI string
-}
 
 
-func LoggerConnect(config AppConfiguration, service string) *logrus.Logger {
+func loggerConnect(config *AppConfiguration, service string) *logrus.Logger {
 
 	log := logrus.New()
 

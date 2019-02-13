@@ -13,14 +13,7 @@ type Storage struct {
 	log    *logrus.Logger
 }
 
-type StorageConfiguration struct {
-	URI string
-	AccessKeyID string
-	SecretAccessKey string
-	UseSSL bool
-}
-
-func storageConnect(config AppConfiguration, Log *logrus.Logger) Storage {
+func storageConnect(config *AppConfiguration, Log *logrus.Logger) Storage {
 
 	// Initialize minio client object.
 	Log.Info("Connecting to Storage")

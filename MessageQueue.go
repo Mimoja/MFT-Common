@@ -33,13 +33,9 @@ type MessageQueue struct {
 	log        *logrus.Logger
 }
 
-type MQConfiguration struct {
-	User     string
-	Password string
-	URI      string
-}
 
-func mqConnect(config AppConfiguration, log *logrus.Logger) MessageBundle {
+
+func mqConnect(config *AppConfiguration, log *logrus.Logger) MessageBundle {
 	conn, err := amqp.Dial("amqp://" + config.MQ.User + ":" + config.MQ.Password + "@" + config.MQ.URI + "/")
 	if err != nil {
 		log.WithError(err).Panicf("Could not connect to rabbitMQ: %v", err)

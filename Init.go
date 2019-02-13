@@ -11,7 +11,7 @@ type AppBundle struct {
 	Storage      Storage
 	DB           DataBase
 	Log          *logrus.Logger
-	Config       AppConfiguration
+	Config       *AppConfiguration
 }
 
 func Init(serviceName string) AppBundle {
@@ -22,7 +22,7 @@ func Init(serviceName string) AppBundle {
 	}
 
 	config := ConfigInit(os.Args[1])
-	log := LoggerConnect(config, serviceName)
+	log := loggerConnect(config, serviceName)
 
 	return AppBundle{
 		MessageQueue: mqConnect(config, log),
