@@ -7,35 +7,22 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-/**
-    CREATE TABLE flashinfo
-    (
-    uid serial NOT NULL,
-    Vendor TEXT,
-	Product          TEXT,
-	Version          TEXT,
-	Title            TEXT,
-	Description      TEXT,
-    ReleaseDate      TEXT,
-	DownloadFileSize TEXT,
-	DownloadURL      TEXT,
-	DownloadPath     TEXT,
-	CurrentPath      TEXT
-    )
-    WITH (OIDS=FALSE);
-*/
-
 type DataBase struct {
 	ES  *elastic.Client
 	log *logrus.Logger
 }
 
-func DBConnect(log *logrus.Logger) DataBase {
+type DBConfiguration struct {
+	URI      string
+	Protocol string
+}
+
+func dbConnect(config AppConfiguration, log *logrus.Logger) DataBase {
 	client, err := elastic.NewClient()
 	checkErr(err)
 
 	// Getting the ES version number is quite common, so there's a shortcut
-	esversion, err := client.ElasticsearchVersion("http://127.0.0.1:9200")
+	esversion, err := client.ElasticsearchVersion(config.DB.Protocol + "://" + config.DB.URI)
 	if err != nil {
 		log.WithError(err).Panic("Could not connect to elastic")
 	}
@@ -45,10 +32,8 @@ func DBConnect(log *logrus.Logger) DataBase {
 }
 
 func (d DataBase) StoreElement(index string, typeString *string, entry interface{}, id *string) {
-
 	is := d.ES.Index().BodyJson(entry)
 	store(d.log, is, index, typeString, id)
-
 }
 
 func (d DataBase) appendElement(index string, typeString *string, entry interface{}, id *string, newElement interface{}) {

@@ -131,7 +131,7 @@ var AMDPSPDirectoryEntries = []AMDPSPDirectoryEntryType{
 	{0x38, "!PSP_ENCRYPTED_NV_DATA", ""},
 	{0x39, "!SEV_APP", ""},
 	{0x40, "!PL2_SECONDARY_DIRECTORY", ""},
-	{0x5f, "FW_PSP_SMUSCS", "Software Configuration Settings Data Block"},
+	{0x5f, "FW_PSP_SMUSCS", "Software AppConfiguration Settings Data Block"},
 	{0x60, "FW_IMC", ""},
 	{0x61, "FW_GEC", ""},
 	{0x62, "FW_XHCI", ""},

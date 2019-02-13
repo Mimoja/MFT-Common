@@ -6,11 +6,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const s3Endpoint = "127.0.0.1:9000"
-const s3AccessKeyID = "***REMOVED***"
-const s3SecretAccessKey = "***REMOVED***"
-const s3useSSL = false
-
 const MainBucket = "files"
 
 type Storage struct {
@@ -18,23 +13,29 @@ type Storage struct {
 	log    *logrus.Logger
 }
 
-func StorageConnect(Log *logrus.Logger) *Storage {
+type StorageConfiguration struct {
+	URI string
+	AccessKeyID string
+	SecretAccessKey string
+	UseSSL bool
+}
+
+func storageConnect(config AppConfiguration, Log *logrus.Logger) Storage {
 
 	// Initialize minio client object.
-	Log.Info("Connecting to S3")
-	client, err := minio.New(s3Endpoint, s3AccessKeyID, s3SecretAccessKey, s3useSSL)
+	Log.Info("Connecting to Storage")
+	client, err := minio.New(config.Storage.URI, config.Storage.AccessKeyID, config.Storage.SecretAccessKey, config.Storage.UseSSL)
 	if err != nil {
 		Log.WithError(err).Panic("Connecting failed")
-		return nil // unreached
 	}
-	storage := &Storage{client: client, log: Log}
+
+	storage := Storage{client: client, log: Log}
 
 	// Create bucket
 	Log.Info("Creating Bucket ", MainBucket)
 	err = storage.MakeBucket(MainBucket)
 	if err != nil {
 		Log.WithError(err).Panic("Bucket creation failed")
-		return nil // unreached
 	}
 
 	return storage

@@ -6,13 +6,20 @@ import (
 	"gopkg.in/sohlich/elogrus.v3"
 )
 
-func ConnectLogger(service string) *logrus.Logger {
+
+type LoggerConfiguration struct {
+	Protocol string
+	URI string
+}
+
+
+func LoggerConnect(config AppConfiguration, service string) *logrus.Logger {
 
 	log := logrus.New()
 
 	log.Level = logrus.DebugLevel
 
-	client, err := elastic.NewClient(elastic.SetURL("http://127.0.0.1:9200"))
+	client, err := elastic.NewClient(elastic.SetURL(config.Logger.Protocol+"://"+config.Logger.URI))
 	if err != nil {
 		log.WithError(err).Error("Could not connect to Elastic for logging")
 		return log

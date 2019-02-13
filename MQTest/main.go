@@ -6,24 +6,22 @@ import (
 	"time"
 )
 
-var MQ MFTCommon.MessageBundle
+var Bundle MFTCommon.AppBundle
 
 func main() {
-
-	Log := MFTCommon.ConnectLogger("TestService")
-	MQ := MFTCommon.MQConnect(Log)
+	Bundle = MFTCommon.Init("MQTest")
 
 	cha := make(chan bool)
 
-	MQ.TestQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
-		Log.Infof("Payload: '%s'", payload)
+	Bundle.MessageQueue.TestQueue.RegisterCallback("DownloaderTestConsumer", func(payload string) error {
+		Bundle.Log.Infof("Payload: '%s'", payload)
 		panic("1237")
 		//cha <- true
 		err := fmt.Errorf("penis")
 		return err
 	})
 
-	MQ.TestQueue.Send("Test")
+	Bundle.MessageQueue.TestQueue.Send("Test")
 
 	<-cha
 

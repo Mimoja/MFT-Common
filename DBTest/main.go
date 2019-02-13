@@ -4,14 +4,15 @@ import (
 	"github.com/Mimoja/MimojaFirmwareToolkit/pkg/Common"
 )
 
+var Bundle MFTCommon.AppBundle
+
 func main() {
-	Log := MFTCommon.ConnectLogger("DBTest")
-	db := MFTCommon.DBConnect(Log)
+	Bundle = MFTCommon.Init("DBTest")
 
 	data := []byte{0x1, 0x2, 0x3, 0x4}
 
 	id := "2345"
 	idData := MFTCommon.GenerateID(data)
-	db.StoreElement("testing", nil, idData, &id)
+	Bundle.DB.StoreElement("testing", nil, idData, &id)
 
 }
