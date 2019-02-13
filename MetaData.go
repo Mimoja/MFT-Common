@@ -28,11 +28,11 @@ type DownloadEntry struct {
 }
 
 type ImportEntry struct {
-	ImportDataDefinition string `json:",omitempty"`
-	MetaData             DownloadEntry   `json:",omitempty"`
-	Contents             []StorageEntry  `json:",omitempty"`
-	ImportTime           string          `json:",omitempty"`
-	Success              bool            `json:",omitempty"`
+	ImportDataDefinition string         `json:",omitempty"`
+	MetaData             DownloadEntry  `json:",omitempty"`
+	Contents             []StorageEntry `json:",omitempty"`
+	ImportTime           string         `json:",omitempty"`
+	Success              bool           `json:",omitempty"`
 }
 type StorageEntry struct {
 	ID        IDEntry  `json:",omitempty"`
@@ -42,14 +42,14 @@ type StorageEntry struct {
 }
 
 type FlashImage struct {
-	FlashimageDataDefinition string `json:",omitempty"`
-	MetaData       DownloadEntry  `json:",omitempty"`
-	ID             IDEntry        `json:",omitempty"`
-	Tags           []string       `json:",omitempty"`
-	FirmwareOffset int64          `json:",omitempty"`
-	AMD            *AMDFirmware   `json:"AMD"`
-	INTEL          *IntelFirmware `json:"INTEL""`
-	Certificates   []string       `json:"Certificates"`
+	FlashimageDataDefinition string         `json:",omitempty"`
+	MetaData                 DownloadEntry  `json:",omitempty"`
+	ID                       IDEntry        `json:",omitempty"`
+	Tags                     []string       `json:",omitempty"`
+	FirmwareOffset           int64          `json:",omitempty"`
+	AMD                      *AMDFirmware   `json:"AMD"`
+	INTEL                    *IntelFirmware `json:"INTEL""`
+	Certificates             []string       `json:"Certificates"`
 }
 
 type IntelFirmware struct {

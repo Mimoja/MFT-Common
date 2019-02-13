@@ -33,8 +33,6 @@ type MessageQueue struct {
 	log        *logrus.Logger
 }
 
-
-
 func mqConnect(config *AppConfiguration, log *logrus.Logger) MessageBundle {
 	conn, err := amqp.Dial("amqp://" + config.MQ.User + ":" + config.MQ.Password + "@" + config.MQ.URI + "/")
 	if err != nil {

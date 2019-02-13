@@ -17,7 +17,7 @@ type AppBundle struct {
 func Init(serviceName string) AppBundle {
 
 	args := os.Args
-	if(len(args) < 2){
+	if len(args) < 2 {
 		log.Fatalf("Path to config file missing. Please provide via '%s pathToConfig.yml'", os.Args[0])
 	}
 

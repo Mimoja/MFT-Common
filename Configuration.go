@@ -8,10 +8,9 @@ import (
 	"strings"
 )
 
-
 type LoggerConfiguration struct {
 	Protocol string
-	URI string
+	URI      string
 }
 
 type MQConfiguration struct {
@@ -21,10 +20,10 @@ type MQConfiguration struct {
 }
 
 type StorageConfiguration struct {
-	URI string
-	AccessKeyID string
+	URI             string
+	AccessKeyID     string
 	SecretAccessKey string
-	UseSSL bool
+	UseSSL          bool
 }
 
 type DBConfiguration struct {
@@ -33,23 +32,20 @@ type DBConfiguration struct {
 }
 
 type AppRunConfiguration struct {
-	Frontend struct{
+	Frontend struct {
 		DownloadEnabled bool
 	}
 }
 
-
 type AppConfiguration struct {
-	Logger LoggerConfiguration
-	MQ MQConfiguration
+	Logger  LoggerConfiguration
+	MQ      MQConfiguration
 	Storage StorageConfiguration
-	DB DBConfiguration
-	App AppRunConfiguration
+	DB      DBConfiguration
+	App     AppRunConfiguration
 }
 
-
-
-func ConfigInit(file string) *AppConfiguration{
+func ConfigInit(file string) *AppConfiguration {
 	var appConfig AppConfiguration
 
 	viper.SetConfigType("yaml")
