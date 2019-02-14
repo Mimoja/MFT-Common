@@ -27,6 +27,12 @@ type DownloadEntry struct {
 	PackageID        IDEntry `json:",omitempty" hash:"-"`
 }
 
+type UserUpload struct {
+	MetaData   DownloadEntry `json:",omitempty"`
+	UploadTime string        `json:",omitempty"`
+	UploadIP   string        `json:",omitempty"`
+}
+
 type ImportEntry struct {
 	ImportDataDefinition string         `json:",omitempty"`
 	MetaData             DownloadEntry  `json:",omitempty"`

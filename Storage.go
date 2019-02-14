@@ -58,8 +58,8 @@ func (storage Storage) MakeBucket(bucketName string) error {
 	return nil
 }
 
-func (storage Storage) StoreBytes(byte []byte, remotePath string) error {
-	_, err := storage.client.PutObject(MainBucket, remotePath, bytes.NewReader(byte), int64(len(byte)), minio.PutObjectOptions{})
+func (storage Storage) StoreBytes(byte []byte, id string) error {
+	_, err := storage.client.PutObject(MainBucket, id, bytes.NewReader(byte), int64(len(byte)), minio.PutObjectOptions{})
 	if err != nil {
 		storage.log.WithError(err).Error("Could not store: %v\n", err)
 	}
