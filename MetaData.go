@@ -7,10 +7,12 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
+	"github.com/balacode/zr-whirl"
 	"github.com/glaslos/ssdeep"
 	"golang.org/x/crypto/sha3"
 	"io"
 	"log"
+	"strings"
 )
 
 type DownloadEntry struct {
@@ -69,6 +71,7 @@ type IDEntry struct {
 	SHA256    string `json:",omitempty"`
 	SHA1      string `json:",omitempty"`
 	MD5       string `json:",omitempty"`
+	Whirlpool string `json:",omitempty"`
 	Algorithm string `json:",omitempty"`
 }
 
@@ -110,6 +113,9 @@ func GenerateID(data []byte) IDEntry {
 		ssdString = ssd.String()
 	}
 
+	whirlpoolData := whirl.Sum512(data)
+
+
 	return IDEntry{
 		SSDEEP:    ssdString,
 		SHA3_512:  fmt.Sprintf("%X", sha3Hash.Sum(nil)),
@@ -117,6 +123,20 @@ func GenerateID(data []byte) IDEntry {
 		SHA256:    fmt.Sprintf("%X", sha256Hash.Sum(nil)),
 		SHA1:      fmt.Sprintf("%X", sha1Hash.Sum(nil)),
 		MD5:       fmt.Sprintf("%X", md5Hash.Sum(nil)),
+		Whirlpool: formatWhirlPool(whirlpoolData[:]),
 		Algorithm: "sha256",
 	}
+}
+
+func formatWhirlPool(ar []byte) (ret string) {
+	for i := 0; i < len(ar); i++ {
+		if i%32 == 0 {
+			ret += whirl.LF
+		}
+		if i%8 == 0 {
+			ret += " "
+		}
+		ret += fmt.Sprintf("%02X", ar[i])
+	}
+	return strings.Trim(ret, " \a\b\f\n\r\t\v")
 }
