@@ -115,7 +115,6 @@ func GenerateID(data []byte) IDEntry {
 
 	whirlpoolData := whirl.Sum512(data)
 
-
 	return IDEntry{
 		SSDEEP:    ssdString,
 		SHA3_512:  fmt.Sprintf("%X", sha3Hash.Sum(nil)),
