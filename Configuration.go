@@ -34,7 +34,7 @@ type DBConfiguration struct {
 type AppRunConfiguration struct {
 	Frontend struct {
 		DownloadEnabled bool
-		ReportResults int
+		ReportResults   int
 	}
 }
 
