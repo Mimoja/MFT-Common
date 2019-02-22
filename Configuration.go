@@ -36,6 +36,9 @@ type AppRunConfiguration struct {
 		DownloadEnabled bool
 		ReportResults   int
 	}
+	Importer struct {
+		ForceReimport bool
+	}
 }
 
 type AppConfiguration struct {
