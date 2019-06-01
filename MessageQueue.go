@@ -168,13 +168,20 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 
 	go func() {
 		for d := range msgs {
-
-			err := callback(string(d.Body))
-			if err != nil {
-				mq.log.Errorf("Callback failed: %v", err)
-				//d.Acknowledger.Nack(d.DeliveryTag, false, true)
-			}
-			d.Acknowledger.Ack(d.DeliveryTag, false)
+			func() {
+				defer func() {
+					if err := recover(); err != nil {
+						mq.log.Errorf("Callback paniced: %v %v", err, d.Body)
+						d.Acknowledger.Nack(d.DeliveryTag, false, true)
+					}
+				}()
+				err := callback(string(d.Body))
+				if err != nil {
+					mq.log.Errorf("Callback failed: %v", err)
+					d.Acknowledger.Nack(d.DeliveryTag, false, true)
+				}
+				d.Acknowledger.Ack(d.DeliveryTag, false)
+			}()
 		}
 	}()
 
