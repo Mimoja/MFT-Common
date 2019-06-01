@@ -18,7 +18,7 @@ func loggerConnect(config *AppConfiguration, service string) *logrus.Logger {
 		return log
 	}
 
-	hook, err := elogrus.NewAsyncElasticHook(client, service, logrus.DebugLevel, "logging")
+	hook, err := elogrus.NewAsyncElasticHook(client, service, logrus.WarnLevel, "logging")
 	if err != nil {
 		log.WithError(err).Error("Could not create logging hook")
 		return log
