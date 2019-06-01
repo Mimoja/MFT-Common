@@ -13,7 +13,7 @@ type DataBase struct {
 }
 
 func dbConnect(config *AppConfiguration, log *logrus.Logger) DataBase {
-	client, err := elastic.NewClient()
+	client, err := elastic.NewSimpleClient(elastic.SetURL(config.DB.Protocol + "://" + config.DB.URI))
 	checkErr(err)
 
 	// Getting the ES version number is quite common, so there's a shortcut

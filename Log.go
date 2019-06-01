@@ -12,7 +12,7 @@ func loggerConnect(config *AppConfiguration, service string) *logrus.Logger {
 
 	log.Level = logrus.DebugLevel
 
-	client, err := elastic.NewClient(elastic.SetURL(config.Logger.Protocol + "://" + config.Logger.URI))
+	client, err := elastic.NewSimpleClient(elastic.SetURL(config.Logger.Protocol + "://" + config.Logger.URI))
 	if err != nil {
 		log.WithError(err).Error("Could not connect to Elastic for logging")
 		return log
