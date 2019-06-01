@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"MimojaFirmwareToolkit/pkg/Common"
+	"fmt"
 	"time"
 )
 

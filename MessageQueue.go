@@ -116,11 +116,11 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 
 	q, err := mq.Connection.QueueDeclare(
 		mq.topic+"->"+consumerName, // name
-		true,  // durable
-		false, // delete when unused
-		false, // exclusive
-		false, // no-wait
-		nil,   // arguments
+		true,                       // durable
+		false,                      // delete when unused
+		false,                      // exclusive
+		false,                      // no-wait
+		nil,                        // arguments
 	)
 
 	if err != nil {
