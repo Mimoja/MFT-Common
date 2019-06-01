@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Mimoja/MimojaFirmwareToolkit/pkg/Common"
+	"MimojaFirmwareToolkit/pkg/Common"
 )
 
 var Bundle MFTCommon.AppBundle

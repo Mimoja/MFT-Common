@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Mimoja/MimojaFirmwareToolkit/pkg/Common"
+	"MimojaFirmwareToolkit/pkg/Common"
 	"time"
 )
 

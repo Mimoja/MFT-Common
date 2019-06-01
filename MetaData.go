@@ -130,7 +130,7 @@ func GenerateID(data []byte) IDEntry {
 func formatWhirlPool(ar []byte) (ret string) {
 	for i := 0; i < len(ar); i++ {
 		if i%32 == 0 {
-			ret += whirl.LF
+			ret += "\n"
 		}
 		if i%8 == 0 {
 			ret += " "
