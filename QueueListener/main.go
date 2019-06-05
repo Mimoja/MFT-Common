@@ -14,7 +14,7 @@ func main() {
 		return nil
 	})
 
-	Bundle.MessageQueue.DownloadedQueue.RegisterCallback("Downloader", func(payload string) error {
+	Bundle.MessageQueue.DownloadedQueue.RegisterCallback("Importer", func(payload string) error {
 		Bundle.Log.WithField("queue", "downloaded").Infof("[Downloaded]: '%s'\n", payload)
 		return nil
 	})
