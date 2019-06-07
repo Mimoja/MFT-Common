@@ -81,7 +81,7 @@ type AMDPSPEntryBinaryHeader struct {
 	ID             uint32
 	SizeSigned     uint32
 	Unknown2       [0x18]byte
-	AlwaysOne      uint32 // Could be a type
+	UnknownType    uint32
 	Unknown3       [4]byte
 	SigFingerprint [16]byte
 	IsCompressed   uint32
