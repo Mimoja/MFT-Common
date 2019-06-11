@@ -2,9 +2,9 @@ package MFTCommon
 
 import (
 	"encoding/json"
-	"runtime/debug"
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
+	"runtime/debug"
 )
 
 const DownloadedTopic = "downloaded"
@@ -172,7 +172,7 @@ func (mq MessageQueue) RegisterCallback(consumerName string, callback eventFunc)
 			func() {
 				defer func() {
 					if err := recover(); err != nil {
-						mq.log.Error("Callback paniced:", err," ", string(debug.Stack()))
+						mq.log.Error("Callback paniced:", err, " ", string(debug.Stack()))
 						d.Acknowledger.Nack(d.DeliveryTag, false, true)
 					}
 				}()
