@@ -172,6 +172,10 @@ func AnalyseAMDFW(Log *logrus.Entry, firmwareBytes []byte) (*amdfw.Image, error)
 func ConvertToMFT(origin *amdfw.Image) *Image {
 	image := Image{}
 
+	if origin == nil{
+		return nil
+	}
+
 	if origin.FlashMapping != nil {
 		image.FlashMapping = fmt.Sprintf("0x%08X", *origin.FlashMapping)
 	}
