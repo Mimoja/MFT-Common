@@ -172,7 +172,7 @@ func AnalyseAMDFW(Log *logrus.Entry, firmwareBytes []byte) (*amdfw.Image, error)
 func ConvertToMFT(origin *amdfw.Image) *Image {
 	image := Image{}
 
-	if origin == nil{
+	if origin == nil {
 		return nil
 	}
 
