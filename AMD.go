@@ -22,6 +22,14 @@ type (
 		Comment   []string
 		TypeInfo  *amdfw.TypeInfo
 		Version   string
+		Size      string
+		Type      string
+	}
+
+	TypeInfo struct {
+		Type    string
+		Name    string
+		Comment string
 	}
 
 	DBEntry struct {
@@ -178,7 +186,9 @@ func AnalyseAMDFW(Log *logrus.Entry, firmwareBytes []byte) (*amdfw.Image, error)
 	image.Roms = roms
 	return &image, err
 }
-func ConvertAMDEntryToMFT(origin *amdfw.Entry) *DBEntry {
+
+func ConvertAMDEntryToMFT(origin amdfw.Entry) DBEntry {
+
 	dbEntry := DBEntry{
 		ID: GenerateID(origin.Raw),
 		BinaryEntry: BinaryEntry{
@@ -186,6 +196,8 @@ func ConvertAMDEntryToMFT(origin *amdfw.Entry) *DBEntry {
 			Comment:   origin.Comment,
 			TypeInfo:  origin.TypeInfo,
 			Version:   origin.Version,
+			Type:      fmt.Sprintf("0x%X", origin.DirectoryEntry.Type),
+			Size:      fmt.Sprintf("0x%X", origin.DirectoryEntry.Size),
 		},
 	}
 
@@ -200,7 +212,7 @@ func ConvertAMDEntryToMFT(origin *amdfw.Entry) *DBEntry {
 		}
 
 	}
-	return &dbEntry
+	return dbEntry
 }
 
 func ConvertAMDFWToMFT(origin *amdfw.Image) *Image {
@@ -269,15 +281,7 @@ func ConvertAMDFWToMFT(origin *amdfw.Image) *Image {
 						Location: fmt.Sprintf("0x%X", entry.DirectoryEntry.Location),
 						Reserved: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
 					},
-					DBEntry: DBEntry{
-						ID: GenerateID(entry.Raw),
-						BinaryEntry: BinaryEntry{
-							Signature: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
-							Comment:   entry.Comment,
-							TypeInfo:  entry.TypeInfo,
-							Version:   entry.Version,
-						},
-					},
+					DBEntry: ConvertAMDEntryToMFT(entry),
 				}
 				if entry.DirectoryEntry.Unknown != nil {
 					newEntry.DirectoryEntry.Unknown = fmt.Sprintf("0x%X", *entry.DirectoryEntry.Unknown)
