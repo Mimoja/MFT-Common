@@ -16,6 +16,19 @@ type (
 		Firmware *Image
 	}
 
+	BinaryEntry struct {
+		Header    map[string]string `json:Header`
+		Signature string
+		Comment   []string
+		TypeInfo  *amdfw.TypeInfo
+		Version   string
+	}
+
+	DBEntry struct {
+		BinaryEntry
+		ID IDEntry
+	}
+
 	AMDAGESA struct {
 		Header string
 		Raw    string
@@ -66,13 +79,10 @@ type (
 		Reserved string
 		Unknown  string
 	}
+
 	Entry struct {
+		BinaryEntry
 		DirectoryEntry DirectoryEntry
-		Header         map[string]string `json:Header`
-		Signature      string
-		Comment        []string
-		TypeInfo       *amdfw.TypeInfo
-		Version        string
 	}
 )
 
@@ -168,8 +178,28 @@ func AnalyseAMDFW(Log *logrus.Entry, firmwareBytes []byte) (*amdfw.Image, error)
 	image.Roms = roms
 	return &image, err
 }
+func ConvertAMDEntryToMFT(origin *amdfw.Entry) *DBEntry {
+	dbEntry := DBEntry{
+		ID: GenerateID(origin.Raw),
+		BinaryEntry: BinaryEntry{
+			Signature: fmt.Sprintf("0x%X", origin.DirectoryEntry.Reserved),
+			Comment:   origin.Comment,
+			TypeInfo:  origin.TypeInfo,
+			Version:   origin.Version,
+		},
+	}
+	
+	dbEntry.Header = map[string]string{}
+	reflectVal := reflect.Indirect(reflect.ValueOf(origin.Header))
+	for i := 0; i < reflectVal.Type().NumField(); i++ {
+		fieldName := reflectVal.Type().Field(i).Name
+		fieldValue := reflectVal.Field(i)
+		dbEntry.Header[fieldName] = fmt.Sprintf("0x%X", fieldValue)
+	}
+	return &dbEntry
+}
 
-func ConvertToMFT(origin *amdfw.Image) *Image {
+func ConvertAMDFWToMFT(origin *amdfw.Image) *Image {
 	image := Image{}
 
 	if origin == nil {
@@ -235,10 +265,12 @@ func ConvertToMFT(origin *amdfw.Image) *Image {
 						Location: fmt.Sprintf("0x%X", entry.DirectoryEntry.Location),
 						Reserved: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
 					},
-					Signature: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
-					Comment:   entry.Comment,
-					TypeInfo:  entry.TypeInfo,
-					Version:   entry.Version,
+					BinaryEntry: BinaryEntry{
+						Signature: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
+						Comment:   entry.Comment,
+						TypeInfo:  entry.TypeInfo,
+						Version:   entry.Version,
+					},
 				}
 				if entry.DirectoryEntry.Unknown != nil {
 					newEntry.DirectoryEntry.Unknown = fmt.Sprintf("0x%X", *entry.DirectoryEntry.Unknown)
