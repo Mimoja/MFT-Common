@@ -81,7 +81,7 @@ type (
 	}
 
 	Entry struct {
-		BinaryEntry
+		DBEntry
 		DirectoryEntry DirectoryEntry
 	}
 )
@@ -188,13 +188,17 @@ func ConvertAMDEntryToMFT(origin *amdfw.Entry) *DBEntry {
 			Version:   origin.Version,
 		},
 	}
-	
-	dbEntry.Header = map[string]string{}
-	reflectVal := reflect.Indirect(reflect.ValueOf(origin.Header))
-	for i := 0; i < reflectVal.Type().NumField(); i++ {
-		fieldName := reflectVal.Type().Field(i).Name
-		fieldValue := reflectVal.Field(i)
-		dbEntry.Header[fieldName] = fmt.Sprintf("0x%X", fieldValue)
+
+	if origin.Header != nil {
+
+		dbEntry.Header = map[string]string{}
+		reflectVal := reflect.Indirect(reflect.ValueOf(origin.Header))
+		for i := 0; i < reflectVal.Type().NumField(); i++ {
+			fieldName := reflectVal.Type().Field(i).Name
+			fieldValue := reflectVal.Field(i)
+			dbEntry.Header[fieldName] = fmt.Sprintf("0x%X", fieldValue)
+		}
+
 	}
 	return &dbEntry
 }
@@ -265,11 +269,14 @@ func ConvertAMDFWToMFT(origin *amdfw.Image) *Image {
 						Location: fmt.Sprintf("0x%X", entry.DirectoryEntry.Location),
 						Reserved: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
 					},
-					BinaryEntry: BinaryEntry{
-						Signature: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
-						Comment:   entry.Comment,
-						TypeInfo:  entry.TypeInfo,
-						Version:   entry.Version,
+					DBEntry: DBEntry{
+						ID: GenerateID(entry.Raw),
+						BinaryEntry: BinaryEntry{
+							Signature: fmt.Sprintf("0x%X", entry.DirectoryEntry.Reserved),
+							Comment:   entry.Comment,
+							TypeInfo:  entry.TypeInfo,
+							Version:   entry.Version,
+						},
 					},
 				}
 				if entry.DirectoryEntry.Unknown != nil {
