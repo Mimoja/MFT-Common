@@ -1,9 +1,9 @@
 package MFTCommon
 
 import (
-	"MimojaFirmwareToolkit/pkg/amdfw"
 	"fmt"
 	"github.com/hillu/go-yara"
+	"github.com/mimoja/amdfw"
 	"github.com/sirupsen/logrus"
 	"os"
 	"reflect"
