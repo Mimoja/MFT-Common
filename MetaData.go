@@ -55,7 +55,7 @@ type FlashImage struct {
 	ID                       IDEntry        `json:",omitempty"`
 	Tags                     []string       `json:",omitempty"`
 	FirmwareOffset           int64          `json:",omitempty"`
-	AMD                      interface{}    `json:"AMD"`
+	AMD                      *AMDFirmware   `json:"AMD"`
 	INTEL                    *IntelFirmware `json:"INTEL""`
 	Certificates             []string       `json:"Certificates"`
 }
