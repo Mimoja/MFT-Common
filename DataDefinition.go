@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-const CurrentImportDataDefinition = "0.1+initial"
+const CurrentImportDataDefinition = "0.2+lastImportTimestamp"
 const CurrentFlashDataDefinition = "0.1+initial"
 
 func DataDefinitionUpgradeRequired(latestKnown string, current string) (bool, error) {

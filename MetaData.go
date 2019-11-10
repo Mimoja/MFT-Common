@@ -45,6 +45,7 @@ type ImportEntry struct {
 	MetaData             DownloadEntry  `json:",omitempty"`
 	Contents             []StorageEntry `json:",omitempty"`
 	ImportTime           string         `json:",omitempty"`
+	LastImportTime       string         `json:",omitempty"`
 	Success              bool           `json:",omitempty"`
 }
 type StorageEntry struct {
