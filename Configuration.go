@@ -34,10 +34,13 @@ type DBConfiguration struct {
 type AppRunConfiguration struct {
 	Frontend struct {
 		DownloadEnabled bool
-		ReportResults   int
+		ReportResults uint
 	}
 	Importer struct {
 		ForceReimport bool
+	}
+	Reindexer struct{
+		ReindexTimeInHours uint
 	}
 }
 
