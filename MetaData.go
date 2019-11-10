@@ -15,6 +15,11 @@ import (
 	"strings"
 )
 
+type DownloadWrapper struct {
+	DownloadEntry
+	ForceReimport bool
+}
+
 type DownloadEntry struct {
 	Vendor           string  `json:",omitempty"`
 	Product          string  `json:",omitempty"`
