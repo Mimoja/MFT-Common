@@ -64,6 +64,7 @@ type FlashImage struct {
 	AMD                      *AMDFirmware   `json:"AMD"`
 	INTEL                    *IntelFirmware `json:"INTEL""`
 	Certificates             []string       `json:"Certificates"`
+	EFIBlob 				 string         `json:",omitempty"`
 }
 
 type IntelFirmware struct {
