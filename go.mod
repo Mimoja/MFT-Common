@@ -3,6 +3,7 @@ module github.com/Mimoja/MFT-Common
 go 1.13
 
 require (
+	github.com/Mimoja/intelfit v0.0.0-20191116112233-90f6e6fa4dab
 	github.com/balacode/zr v0.0.0-20190522225552-02faf3097986 // indirect
 	github.com/balacode/zr-whirl v0.0.0-20190519193442-45283247df8f
 	github.com/fortytw2/leaktest v1.3.0 // indirect
@@ -10,7 +11,6 @@ require (
 	github.com/glaslos/ssdeep v0.1.0
 	github.com/go-ini/ini v1.49.0 // indirect
 	github.com/hashicorp/go-version v1.2.0
-	github.com/hillu/go-yara v1.1.0
 	github.com/mimoja/amdfw v0.0.0-20191029164819-937d6299157c
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

@@ -7,6 +7,7 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
+	"github.com/Mimoja/intelfit"
 	"github.com/balacode/zr-whirl"
 	"github.com/glaslos/ssdeep"
 	"golang.org/x/crypto/sha3"
@@ -69,6 +70,7 @@ type FlashImage struct {
 
 type IntelFirmware struct {
 	IFD *IntelFlashDescriptor `json:"IFD"`
+	FIT *intelfit.FIT `json:"FIT"`
 }
 
 type IDEntry struct {
