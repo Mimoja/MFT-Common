@@ -88,6 +88,8 @@ github.com/mattn/go-runewidth v0.0.4/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzp
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mimoja/amdfw v0.0.0-20191029164819-937d6299157c h1:akM6lM6TjIXuVFhBmrjs8N6ouTzHxe4dSguTZWjK+qI=
 github.com/mimoja/amdfw v0.0.0-20191029164819-937d6299157c/go.mod h1:Ng+yyS9naX+RN/ZKnSlGz8I/J8o2BkhP5r9yAgCRXWc=
+github.com/mimoja/intelfsp v0.0.0-20200131082651-219faac6d96b h1:QgIJQpNVzGqgb4dXctJk9AMnZm+Z9rIguv8bk4WofWE=
+github.com/mimoja/intelfsp v0.0.0-20200131082651-219faac6d96b/go.mod h1:WJTxDHVEWQ3+zR10DpYs7YRbTAgzXvDPp5XOrSsYyQg=
 github.com/minio/minio-go v6.0.14+incompatible h1:fnV+GD28LeqdN6vT2XdGKW8Qe/IfjJDswNVuni6km9o=
 github.com/minio/minio-go v6.0.14+incompatible/go.mod h1:7guKYtitv8dktvNUGrhzmNlA5wrAABTQXCoesZdFQO8=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=

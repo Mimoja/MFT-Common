@@ -12,6 +12,7 @@ require (
 	github.com/go-ini/ini v1.49.0 // indirect
 	github.com/hashicorp/go-version v1.2.0
 	github.com/mimoja/amdfw v0.0.0-20191029164819-937d6299157c
+	github.com/mimoja/intelfsp v0.0.0-20200131082651-219faac6d96b
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/olivere/elastic v6.2.25+incompatible

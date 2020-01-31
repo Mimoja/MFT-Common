@@ -10,6 +10,7 @@ import (
 	"github.com/Mimoja/intelfit"
 	"github.com/balacode/zr-whirl"
 	"github.com/glaslos/ssdeep"
+	"github.com/mimoja/intelfsp"
 	"golang.org/x/crypto/sha3"
 	"io"
 	"log"
@@ -71,6 +72,12 @@ type FlashImage struct {
 type IntelFirmware struct {
 	IFD *IntelFlashDescriptor `json:"IFD"`
 	FIT *intelfit.FIT `json:"FIT"`
+	FSP []IntelFSP `json:"FSP,omitempty"`
+}
+
+type IntelFSP struct {
+	intelfsp.IntelFSP
+	ID IDEntry
 }
 
 type IDEntry struct {
